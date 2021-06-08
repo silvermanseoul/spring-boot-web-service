@@ -1,4 +1,4 @@
-package io.silverman.springbootwebservice.service;
+package io.silverman.springbootwebservice.service.post;
 
 import io.silverman.springbootwebservice.domain.post.PostRepository;
 import io.silverman.springbootwebservice.web.dto.PostSaveRequestDto;
@@ -15,6 +15,6 @@ public class PostService {
 
     @Transactional
     public Long save(PostSaveRequestDto requestDto) {
-        postRepository.save(requestDto.toEntity().getId());
+        return postRepository.save(requestDto.toEntity()).getId();
     }
 }
