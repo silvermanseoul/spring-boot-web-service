@@ -2,10 +2,9 @@ package io.silverman.springbootwebservice.web;
 
 import io.silverman.springbootwebservice.service.post.PostService;
 import io.silverman.springbootwebservice.web.dto.PostSaveRequestDto;
+import io.silverman.springbootwebservice.web.dto.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequiredArgsConstructor
 @RestController
@@ -16,5 +15,10 @@ public class PostApiController {
     @PostMapping("/api/v1/posts")
     public Long save(@RequestBody PostSaveRequestDto requestDto) {
         return postService.save(requestDto);
+    }
+
+    @PatchMapping("/api/v1/posts/{id}")
+    public Long update(@PathVariable("id") Long id, @RequestBody PostUpdateRequestDto requestDto) {
+        return postService.update(id, requestDto);
     }
 }
