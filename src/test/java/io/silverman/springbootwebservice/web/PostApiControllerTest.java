@@ -2,6 +2,7 @@ package io.silverman.springbootwebservice.web;
 
 import io.silverman.springbootwebservice.domain.post.Post;
 import io.silverman.springbootwebservice.domain.post.PostRepository;
+import io.silverman.springbootwebservice.web.dto.PostResponseDto;
 import io.silverman.springbootwebservice.web.dto.PostSaveRequestDto;
 import io.silverman.springbootwebservice.web.dto.PostUpdateRequestDto;
 import org.junit.jupiter.api.AfterEach;
@@ -96,5 +97,32 @@ class PostApiControllerTest {
         List<Post> posts = postRepository.findAll();
         assertEquals(newTitle, posts.get(0).getTitle());
         assertEquals(newContent, posts.get(0).getContent());
+    }
+
+    @Test
+    void 게시글_조회() throws Exception {
+        // Given
+        String title = "테스트 제목";
+        String content = "테스트 내용";
+        String author = "테스트 작성자";
+        Post post = postRepository.save(Post.builder()
+                .title(title)
+                .content(content)
+                .author(author)
+                .build());
+        Long id = post.getId();
+        String url = "http://localhost:" + port + "/api/v1/posts/" + id;
+
+        // When
+        ResponseEntity<PostResponseDto> responseEntity = restTemplate.getForEntity(url, PostResponseDto.class);
+
+        // Then
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+
+        PostResponseDto responseDto = Optional.ofNullable(responseEntity.getBody()).orElseThrow();
+        assertEquals(id, responseDto.getId());
+        assertEquals(title, responseDto.getTitle());
+        assertEquals(content, responseDto.getContent());
+        assertEquals(author, responseDto.getAuthor());
     }
 }
