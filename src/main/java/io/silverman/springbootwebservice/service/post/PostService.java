@@ -2,6 +2,7 @@ package io.silverman.springbootwebservice.service.post;
 
 import io.silverman.springbootwebservice.domain.post.Post;
 import io.silverman.springbootwebservice.domain.post.PostRepository;
+import io.silverman.springbootwebservice.web.dto.PostResponseDto;
 import io.silverman.springbootwebservice.web.dto.PostSaveRequestDto;
 import io.silverman.springbootwebservice.web.dto.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,10 @@ public class PostService {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
         post.update(requestDto.getTitle(), requestDto.getContent());
         return id;
+    }
+
+    public PostResponseDto findById(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
+        return new PostResponseDto(post);
     }
 }
