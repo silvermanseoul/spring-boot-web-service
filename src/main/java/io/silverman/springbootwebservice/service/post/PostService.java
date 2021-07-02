@@ -7,8 +7,8 @@ import io.silverman.springbootwebservice.web.dto.PostSaveRequestDto;
 import io.silverman.springbootwebservice.web.dto.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,6 +28,7 @@ public class PostService {
         return id;
     }
 
+    @Transactional(readOnly = true)
     public PostResponseDto findById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
         return new PostResponseDto(post);
