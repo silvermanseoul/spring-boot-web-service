@@ -2,12 +2,16 @@ package io.silverman.springbootwebservice.service.post;
 
 import io.silverman.springbootwebservice.domain.post.Post;
 import io.silverman.springbootwebservice.domain.post.PostRepository;
+import io.silverman.springbootwebservice.web.dto.PostListResponseDto;
 import io.silverman.springbootwebservice.web.dto.PostResponseDto;
 import io.silverman.springbootwebservice.web.dto.PostSaveRequestDto;
 import io.silverman.springbootwebservice.web.dto.PostUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @RequiredArgsConstructor
@@ -32,5 +36,12 @@ public class PostService {
     public PostResponseDto findById(Long id) {
         Post post = postRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id = " + id));
         return new PostResponseDto(post);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostListResponseDto> findAllDesc() {
+        return postRepository.findAllByOrderByIdDesc().stream()
+                .map(PostListResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
